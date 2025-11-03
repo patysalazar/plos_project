@@ -1,0 +1,149 @@
+---
+output:
+  html_document:
+    keep_md: true
+---
+
+# Walk Rate by Sex - Saskatoon 2021
+
+```{r}
+# Load the required Libraries
+library(sf)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(readxl)
+library(cancensus)
+library(tidyr)
+library(stringr)
+library(purrr)
+library(units)
+library(rlang)
+library(scales)
+
+options(cancensus.use_cache = TRUE)
+```
+
+## 0. Credential & file paths
+
+```{r}
+#set_cancensus_api_key('CensusMapper_a1e87e6e693ad90764c0b852462913c1', install = TRUE)
+#set_cancensus_cache_path("/Users/patysalazar/Desktop/Methods Café/Final Paper/cancensus_cache", install = TRUE) 
+```
+
+```{r}
+plos_csv <- "/Users/patysalazar/Desktop/MSc/PLOS/plos/required_files/sk_da_plos_score.csv"
+plos_seg_csv <- "/Users/patysalazar/Desktop/MSc/PLOS/plos/required_files/sk_segment_plos.csv"
+```
+
+## 1. Region and dataset
+
+CMA 47725 -> Saskatoon
+CA21 -> 2021 census data
+
+```{r}
+dataset <- "CA21"
+region <- list(CMA = "47725")
+```
+
+Searching for vectors that I want to examine
+
+```{r}
+find_census_vectors("Main mode of commuting", dataset="CA21") %>%
+  print(n=24)
+```
+
+Selecting vectors by gender:
+
+v_CA21_7633 -> Main mode of commuting for the employed labour force aged 15 years and over with a usual place of work or no fixed workplace address — Male
+v_CA21_7634 -> Main mode of commuting for the employed labour force aged 15 years and over with a usual place of work or no fixed workplace address — Female
+v_CA21_7648 -> Walked — Male
+v_CA21_7649 -> Walked — Female
+
+Declaring the exact census vectors I want:
+
+```{r}
+ids <- c(
+  total_m = "v_CA21_7633",  
+  total_f = "v_CA21_7634",  
+  walk_m  = "v_CA21_7648", 
+  walk_f  = "v_CA21_7649"   
+)
+```
+
+## 2. Pulling the data at CMA level (Saskatoon):
+
+```{r}
+cma <- get_census(
+  dataset   = dataset,
+  regions   = region,
+  level     = "CMA",
+  geo_format = "sf",
+  use_cache = TRUE,
+  vectors   = unname(ids)
+)
+```
+
+## 3. Normalizing column names (vector IDs)
+
+```{r}
+names(cma) <- ifelse(grepl("^v_CA21_\\d+", names(cma)),
+                     sub("^((v_CA21_\\d+)).*$", "\\1", names(cma)),
+                     names(cma))
+
+# stripping off labels, leaving id
+```
+
+## 4. Computing walk rates by sex:
+
+```{r}
+out <- cma %>%
+  st_drop_geometry() %>%
+  mutate(
+    region_name = dplyr::coalesce(.data[["Region Name"]], .data[["name"]]),
+    total_m = .data[["v_CA21_7633"]],
+    total_f = .data[["v_CA21_7634"]],
+    walk_m  = .data[["v_CA21_7648"]],
+    walk_f  = .data[["v_CA21_7649"]],
+    rate_walk_m = if_else(total_m > 0, walk_m / total_m, NA_real_),
+    rate_walk_f = if_else(total_f > 0, walk_f / total_f, NA_real_)
+  ) %>%
+  select(region_name, total_m, total_f, walk_m, walk_f, rate_walk_m, rate_walk_f)
+
+print(out)
+```
+
+## 5. Plotting bar chart (men vs women)
+
+```{r}
+plot_df <- out %>%
+  pivot_longer(c(rate_walk_f, rate_walk_m),
+               names_to = "sex", values_to = "rate") %>%
+  
+  # reshaping the rate columns into one column for easier plotting
+  
+  mutate(sex = recode(sex,
+                      rate_walk_f = "Women",
+                      rate_walk_m = "Men"))
+
+ggplot(plot_df, aes(sex, rate)) +
+  geom_col(fill="#bcbddc") +
+  geom_text(aes(label = percent(rate, accuracy = 0.1)),
+            vjust = -0.3) +
+  scale_y_continuous(labels = percent_format(accuracy = 1),
+                     expand = expansion(mult = c(0, 0.1))) +
+  labs(
+    title = "Walked to work by sex — Saskatoon CMA (2021)",
+    x = NULL,
+    y = "Share of employed commuters"
+  ) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+

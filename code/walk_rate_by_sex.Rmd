@@ -141,79 +141,17 @@ ggplot(plot_df, aes(sex, rate)) +
 ```
 
 
-What is available (gender-based) at DA-level?
+### What is available (gender-based) at DA-level?
+
+Serching for keywords in census vectors:
 
 ```{r}
-library(cancensus)
-library(dplyr)
-library(stringr)
-library(purrr)
-library(sf)
-
-options(cancensus.use_cache = TRUE)
-
-dataset <- "CA21"
-region  <- list(CMA = "47725")  # Saskatoon CMA
-
-# 1) Pull a full vector catalog (robust) + a few keyword searches to enrich
-catalog <- list_census_vectors(dataset)
-
 sex_kw      <- find_census_vectors("sex",      dataset = dataset, query_type = "keyword")
 gender_kw   <- find_census_vectors("gender",   dataset = dataset, query_type = "keyword")
 labour_kw   <- find_census_vectors("labour",   dataset = dataset, query_type = "keyword")
 employ_kw   <- find_census_vectors("employment", dataset = dataset, query_type = "keyword")
 family_kw   <- find_census_vectors("lone parent", dataset = dataset, query_type = "keyword")
 maint_kw    <- find_census_vectors("household maintainer", dataset = dataset, query_type = "keyword")
-
-cand <- bind_rows(
-  catalog,
-  sex_kw, gender_kw, labour_kw, employ_kw, family_kw, maint_kw
-) %>%
-  distinct(vector, label, type)
-
-# 2) Heuristic filter for good GBA+ proxies (Female/Male/Total types kept)
-genderish <- cand %>%
-  filter(type %in% c("Female","Male","Total")) %>%
-  filter(
-    str_detect(label, regex("sex|gender|female|women", TRUE)) |
-    str_detect(label, regex("lone[- ]parent|one[- ]parent|single[- ]parent|family", TRUE)) |
-    str_detect(label, regex("labour|labour force|employment|employed|participation", TRUE)) |
-    str_detect(label, regex("household maintainer", TRUE)) |
-    str_detect(label, regex("income|low[- ]income|poverty", TRUE)) |
-    str_detect(label, regex("^Population|Total population", TRUE))
-  ) %>%
-  arrange(label, type)
-
-# 3) Batch-probe DA availability (request in chunks so the API is happy)
-vecs <- unique(genderish$vector)
-chunks <- split(vecs, ceiling(seq_along(vecs)/35))  # ~35 per call
-
-arrived <- character(0)
-for (ids in chunks) {
-  res <- try(
-    get_census(dataset = dataset, regions = region, level = "DA",
-               geo_format = "sf", use_cache = TRUE, vectors = ids),
-    silent = TRUE
-  )
-  if (!inherits(res, "try-error")) {
-    arrived <- union(arrived, names(res)[grepl("^v_CA21_\\d+", names(res))])
-  }
-}
-
-genderish_da <- genderish %>%
-  filter(vector %in% arrived) %>%
-  arrange(label, type)
-
-# 4) Show the most useful DA-level candidates you can plug in as GBA+ proxies
-#    (These are *counts*; you'll usually compute a % = Female / Total)
-genderish_da %>%
-  filter(
-    str_detect(label, regex("Population|sex|gender|lone[- ]parent|employment|labour|household maintainer|income", TRUE))
-  ) %>%
-  select(vector, type, label) %>%
-  distinct() %>%
-  print(n = 60)
-
 ```
 
 

@@ -141,27 +141,6 @@ ggplot(plot_df, aes(sex, rate)) +
 ```
 
 
-### What is available (gender-based) at DA-level?
-
-Serching for keywords in census vectors:
-
-```{r}
-sex_kw      <- find_census_vectors("sex",      dataset = dataset, query_type = "keyword")
-gender_kw   <- find_census_vectors("gender",   dataset = dataset, query_type = "keyword")
-labour_kw   <- find_census_vectors("labour",   dataset = dataset, query_type = "keyword")
-employ_kw   <- find_census_vectors("employment", dataset = dataset, query_type = "keyword")
-family_kw   <- find_census_vectors("lone parent", dataset = dataset, query_type = "keyword")
-maint_kw    <- find_census_vectors("household maintainer", dataset = dataset, query_type = "keyword")
-```
-
-
-
-
-
-
-
-
-
 
 
 

@@ -345,7 +345,7 @@ da_diabetes_plot <- ggplot(da_diabetes_all) +
        subtitle = "Saskatoon") +
   theme_void() + theme(legend.position = "bottom")
 
-ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/gender_da_map.png",
+ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/diabetes_da_map.png",
        plot = da_diabetes_plot, width = 8, height = 6, dpi = 300,
        bg = "white")
 
@@ -358,21 +358,21 @@ Splitting into 2 datasets
 
 ```{r}
 # keep only male/female rows from sex-specific prevalence sf
-da_diabetes_sex2 <- da_diab_sex %>%
-  filter(gender %in% c("Male","Female"))
+da_diabetes_sex <- das_keep %>%                # <-- sf with geometry
+  left_join(prev_da_sex, by = "DAUID") %>% # attach prev + gender
+  st_make_valid()     
 
 # common limits across both maps 
-lims <- range(da_diab_sex2$prev, na.rm = TRUE)
+lims <- range(da_diabetes_sex$prev, na.rm = TRUE)
 lims[1] <- 0
 lims[2] <- max(lims[2], 0.15)   # 15% cap
 
 # split
-da_diabetes_male   <- da_diabetes_sex2 %>% filter(gender == "Male")
-da_diabetes_female <- da_diabetes_sex2 %>% filter(gender == "Female")
+da_diabetes_male   <- da_diabetes_sex %>% filter(gender == "Male")
+da_diabetes_female <- da_diabetes_sex %>% filter(gender == "Female")
 ```
 
 Male map (diabetes by DA)
-
 
 ```{r}
 p_male <- ggplot(da_diabetes_male) +
@@ -397,7 +397,7 @@ p_male <- ggplot(da_diabetes_male) +
 
 print(p_male)
 
-ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/gender_da_map.png",
+ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/male_diabetes_da_map.png",
        plot = p_male, width = 8, height = 6, dpi = 300,
        bg = "white")
 ```
@@ -426,7 +426,7 @@ p_female <- ggplot(da_diabetes_female) +
   theme(legend.position = "bottom")
 
 print(p_female)
-ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/gender_da_map.png",
+ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/female_diabetes_da_map.png",
        plot = p_female, width = 8, height = 6, dpi = 300,
        bg = "white")
 ```

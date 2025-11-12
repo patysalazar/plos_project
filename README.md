@@ -21,10 +21,10 @@ By integrating infrastructure data, gender-stratified walking behavior, and an e
 
 ### Methodological Framework
 This research design combines several methods from the course:<br>
-•	Socio-Spatial Epidemiology: to identify geographic disparities in pedestrian infrastructure and walking behavior using spatial analysis at the DA level.<br>
-•	Gender-Based Analysis (GBA+): to examine how gender influences access to pedestrian infrastructure and walking behaviors.<br>
-•	Data Science and Methods Modeling: to develop and validate a PLOS scoring system using spatial data and computational analysis in R.<br>
-•	Healthy Cities and Smart Cities Frameworks: to frame PLOS as an equity indicator for sustainable, health-promoting urban environments.<br>
+&nbsp&nbsp•	Socio-Spatial Epidemiology: to identify geographic disparities in pedestrian infrastructure and walking behavior using spatial analysis at the DA level.<br>
+&nbsp&nbsp•	Gender-Based Analysis (GBA+): to examine how gender influences access to pedestrian infrastructure and walking behaviors.<br>
+&nbsp&nbsp•	Data Science and Methods Modeling: to develop and validate a PLOS scoring system using spatial data and computational analysis in R.<br>
+&nbsp&nbsp•	Healthy Cities and Smart Cities Frameworks: to frame PLOS as an equity indicator for sustainable, health-promoting urban environments.<br>
 
 ### Methods
 •	Study area: Saskatoon, Saskatchewan.<br>
@@ -42,9 +42,7 @@ o	Stratify walking rates by gender and analyze correlations between PLOS and gen
 o	Join Can-ALE data to DAs, comparing with PLOS classifications.<br>
 
 ### Expected Contributions 
-This study will develop a Pedestrian Level-of-Service (PLOS) measure, integrating socio-spatial epidemiology, GBA+, and data science to evaluate walkability equity in Saskatoon. The analysis will generate evidence on inequities in pedestrian infrastructure and walking behavior, highlighting which neighborhoods face the greatest barriers to active mobility.<br>
-
-	The findings will be shared with City of Saskatoon planners and public health stakeholders to inform local infrastructure decisions. The goal is to translate the analysis into practical insights that can guide investments directed at improving sidewalk quality, connectivity, and accessibility, ultimately promoting more active, healthy and inclusive communities. <br>
+This study will develop a Pedestrian Level-of-Service (PLOS) measure, integrating socio-spatial epidemiology, GBA+, and data science to evaluate walkability equity in Saskatoon. The analysis will generate evidence on inequities in pedestrian infrastructure and walking behavior, highlighting which neighborhoods face the greatest barriers to active mobility. The findings will be shared with City of Saskatoon planners and public health stakeholders to inform local infrastructure decisions. The goal is to translate the analysis into practical insights that can guide investments directed at improving sidewalk quality, connectivity, and accessibility, ultimately promoting more active, healthy and inclusive communities. <br>
 
 ### References
 1.	Raad N, Burke MI. What Are the Most Important Factors for Pedestrian Level-of-Service Estimation? A Systematic Review of the Literature. Transp Res Rec. 2018;2672(35):101-117. doi:10.1177/0361198118790623 <br>

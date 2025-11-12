@@ -29,17 +29,17 @@ This research design combines several methods from the course:<br>
 ### Methods
 •	Study area: Saskatoon, Saskatchewan.<br>
 •	Data sources:<br>
-  o	City of Saskatoon open data (sidewalks, roads, paths).<br>
-  o	Statistics Canada 2021 Census (walking mode share by gender and DA).<br>
-  o	Administrative health data (diabetic patients in Saskatoon from 1995 to 2010). <br>
+&nbsp; o	City of Saskatoon open data (sidewalks, roads, paths).<br>
+&nbsp;  o	Statistics Canada 2021 Census (walking mode share by gender and DA).<br>
+&nbsp;  o	Administrative health data (diabetic patients in Saskatoon from 1995 to 2010). <br>
 <br>
 •	Analysis plan:<br>
-  o	Develop a PLOS scoring framework incorporating sidewalk width, class, and material.<br>
-  o	Weight segment scores by length and normalize by DA area to create a continuous PLOS density variable.<br>
-  o	Map PLOS values and classify DAs into four categories: Low, Medium, High, Very High.<br>
-  o	Validate the PLOS score using walk rate.<br>
-  o	Stratify walking rates by gender and analyze correlations between PLOS and gendered walking behavior.<br>
-  o	Join Can-ALE data to DAs, comparing with PLOS classifications.<br>
+&nbsp;  o	Develop a PLOS scoring framework incorporating sidewalk width, class, and material.<br>
+&nbsp;  o	Weight segment scores by length and normalize by DA area to create a continuous PLOS density variable.<br>
+&nbsp;  o	Map PLOS values and classify DAs into four categories: Low, Medium, High, Very High.<br>
+&nbsp;  o	Validate the PLOS score using walk rate.<br>
+&nbsp;  o	Stratify walking rates by gender and analyze correlations between PLOS and gendered walking behavior.<br>
+&nbsp;  o	Join Can-ALE data to DAs, comparing with PLOS classifications.<br>
 
 ### Expected Contributions 
 This study will develop a Pedestrian Level-of-Service (PLOS) measure, integrating socio-spatial epidemiology, GBA+, and data science to evaluate walkability equity in Saskatoon. The analysis will generate evidence on inequities in pedestrian infrastructure and walking behavior, highlighting which neighborhoods face the greatest barriers to active mobility. The findings will be shared with City of Saskatoon planners and public health stakeholders to inform local infrastructure decisions. The goal is to translate the analysis into practical insights that can guide investments directed at improving sidewalk quality, connectivity, and accessibility, ultimately promoting more active, healthy and inclusive communities. <br>

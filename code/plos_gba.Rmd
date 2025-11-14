@@ -524,7 +524,7 @@ cor(analysis_df$walk_rate, analysis_df$prev_all, use = "complete.obs", method = 
 cor(analysis_df$plos_density, analysis_df$prev_all, use = "complete.obs", method = "spearman")
 ```
 
-Geographically weighted regression
+## 5. Geographically weighted regression
 
 ```{r}
 library(spgwr)
@@ -541,26 +541,19 @@ analysis_sf <- das_keep %>%
   filter(!is.na(walk_rate), !is.na(prop_women)) %>%
   st_make_valid()
 
-analysis_sf_clean <- analysis_sf %>%
-  filter(!is.na(walk_rate), !is.na(prop_women))
-
-nrow(analysis_sf_clean)
+nrow(analysis_sf)
 ```
 
-Converting to sp object
+Converting to spatial object 
 
 ```{r}
-analysis_sp <- as(analysis_sf_clean, "Spatial")
+analysis_sp <- as(analysis_sf, "Spatial")
 ```
 
-Choose a bandwidth
+Calculating kernel bandwidth 
 
 ```{r}
-bw <- gwr.sel(
-  walk_rate ~ prop_women,
-  data = analysis_sp,
-  coords = coordinates(analysis_sp)
-)
+bw <- gwr.sel(walk_rate ~ prop_women, data = analysis_sp, coords=coordinates(analysis_sp))
 ```
 
 Running GWR:
@@ -576,22 +569,29 @@ gwr_model <- gwr(
 )
 ```
 
-Extract coefficients
+Printing results
 
 ```{r}
-analysis_sf_clean$coef_women <- gwr_model$SDF$prop_women
+gwr_model
+gwr_model$SDF$prop_women # sdf = spatial points data frame
+```
 
-summary(analysis_sf_clean$coef_women)
+Extracting coefficients
+
+```{r}
+analysis_sf$coef_women <- gwr_model$SDF$prop_women # extracting local coefficients for women proportion and attach to the polygons
+
+summary(analysis_sf$coef_women)
 ```
 
 Mapping coefficients
 
 ```{r}
-coef_map <- ggplot(analysis_sf) +
+gwr_map <- ggplot(analysis_sf) +
   geom_sf(aes(fill = coef_women), color = NA) +
   scale_fill_viridis_c(
     direction = 1,
-    name = "Local coefficient\n(prop. women & walk rate)",
+    name = "Local coefficient:\nProportion women predicting walk rate",
     na.value = "white"
   ) +
   labs(
@@ -599,9 +599,11 @@ coef_map <- ggplot(analysis_sf) +
     subtitle = "Effect of proportion of women on walk rate by DA"
   ) +
   theme_void() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 
-coef_map
+gwr_map
 ```
 
 

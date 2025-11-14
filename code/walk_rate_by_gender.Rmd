@@ -4,7 +4,7 @@ output:
     keep_md: true
 ---
 
-# Walk Rate by Sex - Saskatoon 2021
+# Walk Rate by Gender - Saskatoon 2021
 
 ```{r}
 # Load the required Libraries
@@ -94,7 +94,7 @@ names(cma) <- ifelse(grepl("^v_CA21_\\d+", names(cma)),
 # stripping off labels, leaving id
 ```
 
-## 4. Computing walk rates by sex:
+## 4. Computing walk rates by gender:
 
 ```{r}
 out <- cma %>%
@@ -118,22 +118,22 @@ print(out)
 ```{r}
 plot_df <- out %>%
   pivot_longer(c(rate_walk_f, rate_walk_m),
-               names_to = "sex", values_to = "rate") %>%
+               names_to = "gender", values_to = "rate") %>%
   
   # reshaping the rate columns into one column for easier plotting
   
-  mutate(sex = recode(sex,
+  mutate(gender = recode(gender,
                       rate_walk_f = "Women",
                       rate_walk_m = "Men"))
 
-ggplot(plot_df, aes(sex, rate)) +
+ggplot(plot_df, aes(gender, rate)) +
   geom_col(fill="#bcbddc") +
   geom_text(aes(label = percent(rate, accuracy = 0.1)),
             vjust = -0.3) +
   scale_y_continuous(labels = percent_format(accuracy = 1),
                      expand = expansion(mult = c(0, 0.1))) +
   labs(
-    title = "Walked to work by sex — Saskatoon CMA (2021)",
+    title = "Walked to work by gender — Saskatoon CMA (2021)",
     x = NULL,
     y = "Share of employed commuters"
   ) +

@@ -24,22 +24,22 @@ library(stats)
 dataset <- "CA21"
 ```
 
-No vectors with only sex or gender at DA-level, so I will add up the male/female age groups. 
+No vectors with only gender or gender at DA-level, so I will add up the men/women age groups. 
 
 ```{r}
 vecs <- c(
   total      = "v_CA21_1",
-  male_0_14  = "v_CA21_12",
+  men_0_14  = "v_CA21_12",
   fem_0_14   = "v_CA21_13",
-  male_15_64 = "v_CA21_69",
+  men_15_64 = "v_CA21_69",
   fem_15_64  = "v_CA21_70",
-  male_65p   = "v_CA21_252",
+  men_65p   = "v_CA21_252",
   fem_65p    = "v_CA21_253"
 )
 ```
 
 ```{r}
-sex_da_raw <- get_census(
+gender_da_raw <- get_census(
   dataset    = "CA21",
   regions    = list(CMA = "47725"),
   level      = "DA",
@@ -52,7 +52,7 @@ sex_da_raw <- get_census(
 Standardizing names to raw vector IDs (since the actual vector names are longer and turns up an error) -> dropping the labels after the colon. 
 
 ```{r}
-sex_da_std <- sex_da_raw %>%
+gender_da_std <- gender_da_raw %>%
   rename(DAUID = GeoUID) %>%
   rename_with(~ sub("^((v_CA21_\\d+)).*$", "\\1", .x))
 ```
@@ -60,33 +60,33 @@ sex_da_std <- sex_da_raw %>%
 Building totals & proportions:
 
 ```{r}
-sex_da <- sex_da_std %>%
+gender_da <- gender_da_std %>%
   transmute(
     DAUID       = as.character(DAUID),
     total       = as.numeric(.data[[vecs["total"]]]),
-    male_total  = as.numeric(.data[[vecs["male_0_14"]]])  +
-                  as.numeric(.data[[vecs["male_15_64"]]]) +
-                  as.numeric(.data[[vecs["male_65p"]]]),
+    men_total  = as.numeric(.data[[vecs["men_0_14"]]])  +
+                  as.numeric(.data[[vecs["men_15_64"]]]) +
+                  as.numeric(.data[[vecs["men_65p"]]]),
     fem_total   = as.numeric(.data[[vecs["fem_0_14"]]])   +
                   as.numeric(.data[[vecs["fem_15_64"]]])  +
                   as.numeric(.data[[vecs["fem_65p"]]])
   ) %>%
   mutate(
-    prop_men   = if_else(total > 0, male_total / total, NA_real_),
+    prop_men   = if_else(total > 0, men_total / total, NA_real_),
     prop_women = if_else(total > 0, fem_total  / total, NA_real_)
   )
 
-sex_da
+gender_da
 ```
 
-Summary of sex by DA:
+Summary of gender by DA:
 
 ```{r}
-summary(sex_da$prop_women)
-summary(sex_da$prop_men)
+summary(gender_da$prop_women)
+summary(gender_da$prop_men)
 ```
 
-## 2. Mapping sex by DA
+## 2. Mapping gender by DA
 
 ```{r}
 # plos code
@@ -197,11 +197,11 @@ Keep only DAs analyzed
 das_keep <- das_cma %>% filter(DAUID %in% keep_ids)
 ```
 
-Join sex proportions 
+Join gender proportions 
 
 ```{r}
 gender_keep <- das_keep %>%
-  left_join(sex_da, by = "DAUID") %>%
+  left_join(gender_da, by = "DAUID") %>%
   st_transform(target_crs)
 ```
 
@@ -227,16 +227,18 @@ gender_da_map <- ggplot(gender_keep) +
     type = "div", palette = "Reds", direction = -1,
     limits = c(0.40, 0.60), oob = squish,
     labels = percent_format(accuracy = 1),
-    name = "Women (%)"
+    name = "Women (%)",
+    na.value = "white"
   ) +
   coord_sf(xlim = st_bbox(ped)[c("xmin","xmax")],
            ylim = st_bbox(ped)[c("ymin","ymax")],
            expand = FALSE) +
   labs(title = "Proportion of Women by Dissemination Area",
        subtitle = "Saskatoon",
-       caption = "Data: Statistics Canada, Census 2021 (Sex at birth)") +
+       caption = "Data: Statistics Canada, Census 2021") +
   theme_void() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        legend.title = element_text(size=8))
 
 gender_da_map
 
@@ -251,22 +253,24 @@ ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/
 health_data_path <- "/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/required_files/Raw data for hospitalizations_for_Paty.xlsx"
 ```
 
+Renaming variables
+
 ```{r}
 health_data <- read_excel(
   path = health_data_path,
   sheet = "Diabetes"  
-)
+) %>%
+  mutate(
+    da = as.character(da),
+    DAUID = da,
+    gender_display = recode(gender,
+                            "Male"   = "men",
+                            "Female" = "women")
+  )
 
 names(health_data)
 ```
 
-Renaming da to DAUID
-
-```{r}
-health_data <- health_data %>%
-  mutate(da = as.character(da)) %>%
-  rename(DAUID = da)
-```
 
 Overall cases by DA
 
@@ -275,28 +279,28 @@ cases_da <- health_data %>%
   group_by(DAUID) %>%
   summarise(cases_all = n())
 
-cases_da_sex <- health_data %>%
-  filter(gender %in% c("Male","Female")) %>%
-  count(DAUID, gender, name = "cases") %>%
+cases_da_gender <- health_data %>%
+  filter(gender_display %in% c("men","women")) %>%
+  count(DAUID, gender = gender_display, name = "cases") %>%
   ungroup()
 ```
 
 Overall denominator for prevalence (per DA)
 
 ```{r}
-den_all <- sex_da %>% select(DAUID, pop_all = total)
+den_all <- gender_da %>% select(DAUID, pop_all = total)
 ```
 
-Sex-specific denominator for prevalence (per DA)
+Gender-specific denominator for prevalence (per DA)
 
 ```{r}
-den_sex <- sex_da %>%
+den_gender <- gender_da %>%
   transmute(
     DAUID,
-    Male   = male_total,
-    Female = fem_total
+    men   = men_total,
+    women = fem_total
   ) %>%
-  pivot_longer(c(Male, Female), names_to="gender", values_to="pop")
+  pivot_longer(c(men, women), names_to="gender", values_to="pop")
 ```
 
 Overall prevalence by DA
@@ -309,14 +313,14 @@ prev_da <- cases_da %>%
 prev_da
 ```
 
-Sex-specific prevalence by DA
+Gender-specific prevalence by DA
 
 ```{r}
-prev_da_sex <- cases_da_sex %>%
-  left_join(den_sex, by = c("DAUID","gender")) %>%
+prev_da_gender <- cases_da_gender %>%
+  left_join(den_gender, by = c("DAUID","gender")) %>%
   mutate(prev = if_else(pop > 0, cases / pop, NA_real_))
 
-prev_da_sex
+prev_da_gender
 ```
 
 Joining datasets by DA
@@ -335,7 +339,8 @@ da_diabetes_all <- das_keep %>%
 da_diabetes_plot <- ggplot(da_diabetes_all) +
   geom_sf(aes(fill = prev_all), color = NA) +
   scale_fill_viridis_c(labels = percent_format(accuracy = 0.1),
-                       name = "Diabetes prevalence") +
+                       name = "Diabetes prevalence",
+                       na.value = "white") +
   coord_sf(
     xlim = st_bbox(ped)[c("xmin","xmax")],
     ylim = st_bbox(ped)[c("ymin","ymax")],
@@ -352,82 +357,86 @@ ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/
 da_diabetes_plot
 ```
 
-Sex-specific maps
+Gender-specific maps
 
 Splitting into 2 datasets
 
 ```{r}
-# keep only male/female rows from sex-specific prevalence sf
-da_diabetes_sex <- das_keep %>%                # <-- sf with geometry
-  left_join(prev_da_sex, by = "DAUID") %>% # attach prev + gender
+# keep only men/women rows from gender-specific prevalence sf
+da_diabetes_gender <- das_keep %>%                # <-- sf with geometry
+  left_join(prev_da_gender, by = "DAUID") %>% # attach prev + gender
   st_make_valid()     
 
 # common limits across both maps 
-lims <- range(da_diabetes_sex$prev, na.rm = TRUE)
+lims <- range(da_diabetes_gender$prev, na.rm = TRUE)
 lims[1] <- 0
 lims[2] <- max(lims[2], 0.15)   # 15% cap
 
 # split
-da_diabetes_male   <- da_diabetes_sex %>% filter(gender == "Male")
-da_diabetes_female <- da_diabetes_sex %>% filter(gender == "Female")
+da_diabetes_men   <- da_diabetes_gender %>% filter(gender == "men")
+da_diabetes_women <- da_diabetes_gender %>% filter(gender == "women")
 ```
 
-Male map (diabetes by DA)
+Men map (diabetes by DA)
 
 ```{r}
-p_male <- ggplot(da_diabetes_male) +
+p_men <- ggplot(da_diabetes_men) +
   geom_sf(aes(fill = prev), color = NA) +
   scale_fill_viridis_c(
     limits = lims, oob = squish,
     labels = percent_format(accuracy = 0.1),
     name = "Diabetes prevalence",
-    na.value = "grey80"  
+    na.value = "white"  
   ) +
+  guides(fill = guide_colorbar(barheight = 0.6, barwidth = 12)) +
   coord_sf(
     xlim = st_bbox(ped)[c("xmin","xmax")],
     ylim = st_bbox(ped)[c("ymin","ymax")],
     expand = FALSE
   ) +
   labs(
-    title = "Diabetes Prevalence by DA — Male",
+    title = "Diabetes Prevalence by DA — Men",
     subtitle = "Saskatoon"
   ) +
   theme_void() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 8))
 
-print(p_male)
+print(p_men)
 
-ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/male_diabetes_da_map.png",
-       plot = p_male, width = 8, height = 6, dpi = 300,
+ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/men_diabetes_da_map.png",
+       plot = p_men, width = 8, height = 6, dpi = 300,
        bg = "white")
 ```
 
-Female map (diabetes by DA)
+Women map (diabetes by DA)
 
 ```{r}
-p_female <- ggplot(da_diabetes_female) +
+p_women <- ggplot(da_diabetes_women) +
   geom_sf(aes(fill = prev), color = NA) +
   scale_fill_viridis_c(
     limits = lims, oob = squish,
     labels = percent_format(accuracy = 0.1),
     name = "Diabetes prevalence",
-    na.value = "grey80"
+    na.value = "white"
   ) +
+  guides(fill = guide_colorbar(barheight = 0.6, barwidth = 12)) +
   coord_sf(
     xlim = st_bbox(ped)[c("xmin","xmax")],
     ylim = st_bbox(ped)[c("ymin","ymax")],
     expand = FALSE
   ) +
   labs(
-    title = "Diabetes Prevalence by DA — Female",
+    title = "Diabetes Prevalence by DA — Women",
     subtitle = "Saskatoon"
   ) +
   theme_void() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 8))
 
-print(p_female)
-ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/female_diabetes_da_map.png",
-       plot = p_female, width = 8, height = 6, dpi = 300,
+print(p_women)
+ggsave("/Users/patysalazar/Desktop/Methods Café/Final Paper/plos_project/maps/women_diabetes_da_map.png",
+       plot = p_women, width = 8, height = 6, dpi = 300,
        bg = "white")
 ```
 
@@ -449,7 +458,7 @@ Analysis data frame
 ```{r}
 analysis_df <- final_scores %>%               
   select(DAUID, walk_rate, plos_density) %>%
-  left_join(sex_da %>% select(DAUID, prop_women, total), by = "DAUID") %>%
+  left_join(gender_da %>% select(DAUID, prop_women, total), by = "DAUID") %>%
   left_join(prev_da %>% select(DAUID, prev_all), by = "DAUID") %>%  
   mutate(
     plos_z        = as.numeric(scale(plos_density)),
@@ -515,17 +524,85 @@ cor(analysis_df$walk_rate, analysis_df$prev_all, use = "complete.obs", method = 
 cor(analysis_df$plos_density, analysis_df$prev_all, use = "complete.obs", method = "spearman")
 ```
 
+Geographically weighted regression
 
+```{r}
+library(spgwr)
+```
 
+Converting analysis_df to spatial df by joining to polygons
 
+```{r}
+analysis_sf <- das_keep %>%
+  left_join(
+    analysis_df %>% select(DAUID, walk_rate, prop_women),
+    by = "DAUID"
+  ) %>%
+  filter(!is.na(walk_rate), !is.na(prop_women)) %>%
+  st_make_valid()
 
+analysis_sf_clean <- analysis_sf %>%
+  filter(!is.na(walk_rate), !is.na(prop_women))
 
+nrow(analysis_sf_clean)
+```
 
+Converting to sp object
 
+```{r}
+analysis_sp <- as(analysis_sf_clean, "Spatial")
+```
 
+Choose a bandwidth
 
+```{r}
+bw <- gwr.sel(
+  walk_rate ~ prop_women,
+  data = analysis_sp,
+  coords = coordinates(analysis_sp)
+)
+```
 
+Running GWR:
 
+```{r}
+gwr_model <- gwr(
+  walk_rate ~ prop_women,
+  data = analysis_sp,
+  bandwidth = bw,
+  coords = coordinates(analysis_sp),
+  hatmatrix = TRUE,
+  se.fit = TRUE
+)
+```
+
+Extract coefficients
+
+```{r}
+analysis_sf_clean$coef_women <- gwr_model$SDF$prop_women
+
+summary(analysis_sf_clean$coef_women)
+```
+
+Mapping coefficients
+
+```{r}
+coef_map <- ggplot(analysis_sf) +
+  geom_sf(aes(fill = coef_women), color = NA) +
+  scale_fill_viridis_c(
+    direction = 1,
+    name = "Local coefficient\n(prop. women & walk rate)",
+    na.value = "white"
+  ) +
+  labs(
+    title = "Geographically Weighted Regression Coefficients",
+    subtitle = "Effect of proportion of women on walk rate by DA"
+  ) +
+  theme_void() +
+  theme(legend.position = "bottom")
+
+coef_map
+```
 
 
 

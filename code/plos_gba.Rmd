@@ -501,6 +501,29 @@ summary(m0w)
 
 Slightly stronger when weighted by population, suggesting that larger DAs might show a clearer relationship between gender composition and walk rate. Almost statistically significant. 
 
+Model without walk rate = 0
+
+```{r}
+analysis_clean <- analysis_df %>%
+  filter(
+    walk_rate > 0,               
+    !is.na(walk_rate),
+    !is.na(prop_women),
+    prop_women > 0 & prop_women < 1
+  )
+```
+
+```{r}
+# unweigthed
+m0 <- lm(walk_rate ~ prop_women, data = analysis_clean)
+summary(m0)
+
+# weighted by DA population
+m0w <- lm(walk_rate ~ prop_women, data = analysis_clean, weights = total)
+summary(m0w)
+```
+
+
 Scatterplot
 
 ```{r}
@@ -516,6 +539,63 @@ ggplot(analysis_df, aes(x = prop_women, y = walk_rate)) +
   ) +
   theme_minimal()
 ```
+
+New scatterplot (removing invalid walking rate values - outliers)
+
+```{r}
+ggplot(analysis_clean, aes(x = prop_women, y = walk_rate)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  labs(
+    x = "Proportion women",
+    y = "Walk rate",
+    title = "Walk rate vs. gender"
+  ) +
+  theme_minimal()
+```
+
+Faceted scatterplot with men proportion
+
+```{r}
+# creating dataframe
+analysis_clean2 <- analysis_clean %>%
+  mutate(
+    prop_men = 1 - prop_women
+  ) %>%
+  select(DAUID, walk_rate, prop_women, prop_men) %>%
+  pivot_longer(
+    cols = c(prop_women, prop_men),
+    names_to = "gender",
+    values_to = "proportion"
+  ) %>%
+  mutate(
+    gender = recode(gender,
+                    "prop_women" = "Women",
+                    "prop_men" = "Men")
+  )
+
+# plot
+facet_plot <- ggplot(analysis_clean2, aes(x = proportion, y = walk_rate)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  scale_x_continuous(labels = percent_format(accuracy = 1)) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  facet_wrap(~ gender) +
+  labs(
+    title = "Walk rate vs. gender composition",
+    x = "Proportion",
+    y = "Walk rate"
+  ) +
+  theme(
+    panel.spacing.x = unit(0.2, "lines")
+  )
+  theme_minimal()
+
+facet_plot
+```
+
 
 Diabetes correlations
 

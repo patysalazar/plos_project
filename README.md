@@ -1,14 +1,15 @@
 # Pedestrian Level-of-Service (PLOS) and Walkability Equity in Saskatoon: A Gender-Based and Health Analysis 
 
 Patricia Salazar-Ramirez, Meisam Ghasedi, Daniel Fuller
+Pdf version of the report available [here](link).
 
-### Research Questions
+## I. Research Questions
 1.	How does pedestrian infrastructure quality, measured by the Pedestrian Level-of-Service (PLOS), relate to walking behavior across Saskatoon?<br>
     a) Do these patterns differ by gender?<br>
 2.	How do PLOS and walking rate relate to diabetes in each dissemination area (DA)? <br>
 
-### Rationale and Significance
-WII. Development of Ideas
+## II. Rationale and Significance
+### Development of Ideas
 Rationale and Significance
 Walking is a core determinant of health and the foundation of sustainable cities. However, disparities in pedestrian infrastructure often reflect social inequalities, especially differences in mobility, safety, and comfort1. Pedestrian Level-of-Service (PLOS) is one of the most widely used metrics for assessing the overall quality of the walking environment.2 
 
@@ -19,20 +20,21 @@ The degree to which the surroundings are pleasant and encourage walking is known
 This research will evaluate a Pedestrian Level-of Service measurement by dissemination area (DA) in Saskatoon, using three variables: sidewalk width, class, and material. It will also address gaps in existing literature by applying a sex- and gender-based analysis (GBA+) to the spatial assessment of pedestrian environments, identifying potential inequities in infrastructure quality and walking behavior. Finally, the study will compare PLOS results with administrative health data from 1995 to 2010, evaluating the association between walk rate and diabetes.  
 
 By integrating infrastructure data, gender-stratified walking behavior, and administrative data, this research will contribute to Healthy and Smart Cities paradigms, using geographic data to guide equitable urban design.
-Objectives
+
+### Objectives
 1.	To develop a PLOS model using municipal spatial data on sidewalk characteristics in Saskatoon.
 2.	To validate the PLOS measure using walking to work rates.
 3.	To assess the spatial relationship between PLOS scores, walking rate, gender, and diabetes within a Healthy Cities and Smart Cities framework.
  
-III. Methods and Approach
-Methodological Framework
+## III. Methods and Approach
+### Methodological Framework
 This research design combines several methods from the course:
 •	Socio-Spatial Epidemiology: to identify geographic disparities in pedestrian infrastructure and walking behavior using spatial analysis at the DA level.
 •	Gender-Based Analysis (GBA+): to examine how gender influences use of pedestrian infrastructure and walking behaviors.
 •	Data Science and Methods Modeling: to develop and validate a PLOS scoring system using spatial data and computational analysis in R.
 •	Healthy Cities and Smart Cities Frameworks: to frame PLOS as an equity indicator for sustainable, health-promoting urban environments.
 
-Data 
+### Data 
 1)	Study area: Saskatoon, Saskatchewan.
 2)	Data sources:
 a)	City of Saskatoon open data (sidewalks, roads, paths).
@@ -58,33 +60,35 @@ Statistical analyses were conducted at the DA level. Bivariate correlations (Pea
 
 To explore whether the relationship between gender composition and walking behavior varied across Saskatoon DAs, a Geographically Weighted Regression (GWR) model was applied. GWR does not estimate a single global coefficient for the association between the proportion of women and walk rate, instead, it allows the strength and direction of the relationship to differ across geographic space. First, DA-level variables (walk rate and proportion of women) were joined to spatial polygons, and this was converted to a spatial object. Then, a bandwidth was selected to determine the spatial extend over which local regressions were estimated. The GWR model generated a local coefficient for each DA, indicating how strongly the proportion of women predicted walk rate in that specific area. These coefficients were mapped to visualize the heterogenitiy of the relationship.
  
-IV. Results and Discussion
-PLOS Scores
+## IV. Results and Discussion
+### PLOS Scores
 The PLOS map of pedestrian segments shows a clear disparity in sidewalk quality, width, and surface material between central and peripheral neighborhoods (Figure 1). 
  
-Figure 1: Segment-level Pedestrian Level-of-Service (PLOS) in Saskatoon
+![segment_level_plos](https://github.com/walkabillylab/plos_saskatoon/blob/main/maps/PLOS_Saskatoon_segments_highres.jpg)<br>
+Figure 1: Segment-level Pedestrian Level-of-Service (PLOS) in Saskatoon. [(View Code)](https://github.com/walkabillylab/plos_saskatoon/blob/main/code/plos_final_code_segments.Rmd).<br>
 
 The city's downtown has a concentration of high and very high PLOS scores. Pedestrian paths are more continuous, comfortable, and accessible in these places because of their higher densities and more developed infrastructure. This is also reflected in the continuous PLOS map (Figure 2). 
  
-Figure 2: Continuous Pedestrian Level-of-Service (PLOS) in Saskatoon
+![continuous_plos](https://github.com/walkabillylab/plos_saskatoon/blob/main/maps/PLOS_Saskatoon_continuous.png)<br>
+Figure 2: Continuous Pedestrian Level-of-Service (PLOS) in Saskatoon. [(View Code)](https://github.com/walkabillylab/plos_saskatoon/blob/main/code/plos_final_code.Rmd).<br>
 
 Newer districts outside the city’s denser central areas tend to have medium PLOS scores. These neighborhoods present adequate pedestrian infrastructure but may also exhibit gaps in connectivity or quality. Bigger, less dense distribution regions have lower PLOS scores overall, reflecting car-centered layouts and limited supportive features for pedestrians. 
 
 In general, the findings show a distinct pedestrian infrastructure difference between the city centre and its periphery, with central neighborhoods providing areas that encourage walking more than the suburbs and industrial areas, which appear to be designed as mostly car oriented. These results highlight the need for targeted infrastructure in lower PLOS regions to enhance equity, safety, and accessibility across Saskatoon.
 
-Walk rate validation
+### Walk rate validation
 The central neighborhoods of Saskatoon exhibit a higher proportion of walking rates, which coincide with regions with higher PLOS. On the other hand, walking mode shares and PLOS are lower in suburban and industrial areas (Figure 3). 
 
  
-
-Figure 3. Walking rates (%) by Dissemination Area in Saskatoon.
+![walking_rate_saskatoon](https://github.com/walkabillylab/plos_saskatoon/blob/main/maps/PLOS_Saskatoon_walk-rate.png)<br>
+Figure 3. Walking rates (%) by Dissemination Area in Saskatoon. [(View Code)](https://github.com/walkabillylab/plos_saskatoon/blob/main/code/walk_rate_scatterplot.Rmd).<br>
 
 The scatterplot demonstrates a weak-to-moderate positive correlation: walking rate tends to increase as PLOS scores increase. This implies that while improved pedestrian infrastructure is associated with increased walking, other factors, such land use and built environment factors, are equally important in creating walkable communities (Figure 4). 
 
- 
-Figure 4: Scatterplot of Density vs Walking Rate, Saskatoon Dissemination Areas
+![scatterplot_plos_walkingrate](https://github.com/walkabillylab/plos_saskatoon/blob/main/maps/PLOS_walk-rate_scatterplot.png)<br>
+Figure 4: Scatterplot of Density vs Walking Rate, Saskatoon Dissemination Areas. [(View Code)](https://github.com/walkabillylab/plos_saskatoon/blob/main/code/walk_rate_scatterplot.Rmd).<br>
 
-GBA+ Analysis
+### GBA+ Analysis
 1)	Walk rate by gender
 At the CMA level, women walk to work slightly more than men (4.5% vs 3.2%) (Figure 5), reflecting small gender differences in active commuting. However, this comparison is at a bigger geographic level than other analyses and could be concealing variation across neighborhoods.
 
@@ -100,7 +104,7 @@ Figure 6: Proportion of women by DA in Saskatoon.
 
 These patterns suggest that the gender composition of neighborhoods may align with differences in land use and employment type. 
 
-Health outcome: Diabetes at DA-level
+### Health outcome: Diabetes at DA-level
 
 Overall diabetes prevalence (Figure 7) ranged from below 1% to over 10%. According to Statistics Canada12, the prevalence of diabetes in 2021 was 9.4%. In Saskatchewan, the diabetes prevalence was 9% in 202413. Although the administrative data source is from 1995 to 2010 and the overall prevalence has increased since then14, it accurately reflects diabetes prevalence in Saskatoon, which is lower than provincial average15. 
  
@@ -117,7 +121,7 @@ When visually comparing to the PLOS and walk rate maps (Figures 2 and 3), there 
 Among women (Figure 8a), diabetes prevalence is slightly lower and more evenly distributed across the city, while men (Figure 8b) exhibit higher prevalence areas in the northwest and eastern periphery of the city, coinciding with more automobile-dependent neighborhoods. There are also some missing areas in both maps, likely due to suppressed data or small counts. 	
 Overall, these patterns reinforce that walkability inequities align with health inequities. Although these patterns cannot establish causation, they do point to structural, location-based health disparities linked to transportation environments.
 
-Correlation and Regression
+### Correlation and Regression
 	Pairwise correlations showed a weak positive association between PLOS density and walk rate (r ≈ 0.15), confirming that better pedestrian infrastructure corresponds to slightly higher walking activity. Correlations between walk to work rate and diabetes prevalence (r ≈ -0.08) were weak, and the negative PLOS and diabetes prevalence correlation coefficient is consistent with expectations that areas with more walking have lower diabetes prevalence.  
 
 The coefficient for women proportion per DA in the linear regression model between proportion of women and walk-to-work rate was 0.149 can be interpreted as: for every 1.0 (100%) increase in the proportion of women, the average walk rate increases by about 15% However, this relationship is not statistically significant (p = 0.131). The R² (0.006) is extremely small, meaning the proportion of women explains less than 1% of the variation in walk rates. The weighted model by DA population resulted in a nearly identical coefficient (0.151) and a p-value not reaching statistical significance at the 0.05 level (p = 0.077). This indicates that the relationship becomes clearer when considering population size, and larger DAs could show a slightly stronger gender-walking association. However, the R² (0.0085) remains very low, so it is not a strong predictor. 
@@ -135,20 +139,22 @@ Figure 10: Geographically Weighted Regression Coefficients of Proportion of Wome
 In several walkable areas, particularly around the University of Saskatchewan campus, the GWR coefficients were among the most positive (shown in yellow), indicating that DAs with a higher proportion of women also had higher walk-to-work rates. In contrast, the downtown area displayed some of the strongest negative coefficients (dark purple), suggesting that women were less likely to walk to work in these central neighbourhoods despite their walkability. Most other areas, especially suburban DAs, showed coefficients close to zero. These contrasts highlight that gender walking patterns in Saskatoon are strongly context-dependent, emphasizing the need for neighbourhood-specific planning that considers gendered mobility.
 
 Together, findings suggest that PLOS and walk rates are aligned spatially but not perfectly correlated, indicating that infrastructure alone does not drive walking behaviour. Furthermore, gender composition appears to influence walkability at the DA level. Diabetes prevalence shows spatial patterns similar to those of low-PLOS and low-walk-rate areas, highlighting potential health inequities in built environment and transportation infrastructure. 
-V. Conclusions
-Summary
+
+## V. Conclusions
+### Summary
 This project developed a Pedestrian Level-of-Service (PLOS) measure for Saskatoon, integrating elements of socio-spatial epidemiology, Gender-Based Analysis Plus (GBA+), and data science to examine equity in walkability and health. The analysis revealed clear spatial inequalities in sidewalk quality and walking rates, with central neighborhoods showing higher walkability and slightly lower diabetes prevalence compared to peripheral, car-oriented areas. Although global statistical associations were weak, geographically weighted regression indicated strong local variation in how gender composition relates to walking. These findings demonstrate that walkability and gendered mobility are shaped by neighbourhood context and highlight opportunities for equity-oriented pedestrian planning in Saskatoon.
 
-Expected Contributions 
+### Expected Contributions 
 The findings are being shared with City of Saskatoon planners and public health stakeholders to inform local infrastructure decisions. City planners are being consulted in refining the PLOS scoring framework and interpreting spatial patterns, ensuring that the analytical approach reflects real-world planning needs and aiding in targeting infrastructure changes. Future iterations of this project will continue to engage planners and public health stakeholders earlier in the process, incorporating their feedback into the refinement of PLOS measurement and data visualization tools. 
 
 The overarching goal is to translate the analysis into practical insights that can guide investments directed at improving sidewalk quality, connectivity, and accessibility, ultimately promoting more active, healthy and inclusive communities. 
 
-Limitations and Future Directions
+### Limitations and Future Directions
 The analysis is cross-sectional, meaning causation cannot be inferred between pedestrian environment and health outcomes. In addition, temporal mismatches between administrative health data and 2021 Census information may reduce precision. The PLOS index focuses on physical sidewalk features and does not yet incorporate broader walkability dimensions such as traffic safety.
 
 Future work should incorporate time-series data to track changes in infrastructure and health outcomes, include individual-level mobility data for validation, and expand GBA+ to explore intersections with income, age, and disability, providing a more comprehensive view of walkability equity. 
-References
+
+## References
 1.	Raad N, Burke MI. What Are the Most Important Factors for Pedestrian Level-of-Service Estimation? A Systematic Review of the Literature. Transp Res Rec. 2018;2672(35):101-117. doi:10.1177/0361198118790623
 2.	Landis BW, Vattikuti VR, Ottenberg RM, McLeod DS, Guttenplan M. Modeling the Roadside Walking Environment: Pedestrian Level of Service. Transp Res Rec. 2001;1773(1):82-88. doi:10.3141/1773-10
 3.	Kadali BR, Vedagiri P. Review of Pedestrian Level of Service: Perspective in Developing Countries. Transp Res Rec. 2016;2581(1):37-47. doi:10.3141/2581-05

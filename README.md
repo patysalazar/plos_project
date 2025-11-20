@@ -1,7 +1,9 @@
 # Pedestrian Level-of-Service (PLOS) and Walkability Equity in Saskatoon: A Gender-Based and Health Analysis 
 
-Patricia Salazar-Ramirez, Meisam Ghasedi, Daniel Fuller
-Pdf version of the report available [here](link).
+Patricia Salazar-Ramirez, Meisam Ghasedi, Daniel Fuller<br>
+
+## Abstract
+Pedestrian infrastructure plays an important role in shaping mobility and health. This study developed a Pedestrian Level-of-Service (PLOS) measure for Saskatoon and examined its relationship with walking to work, gender composition, and diabetes prevalence at the dissemination-area (DA) level. Results show strong spatial clustering of high PLOS and walking, weak overall associations between gender and walk rates, and geographically varying local effects. Low PLOS areas with lower walking and higher diabetes prevalence indicate potential equity gaps
 
 ## I. Research Questions
 1.	How does pedestrian infrastructure quality, measured by the Pedestrian Level-of-Service (PLOS), relate to walking behavior across Saskatoon?<br>
@@ -92,30 +94,35 @@ Figure 4: Scatterplot of Density vs Walking Rate, Saskatoon Dissemination Areas.
 1)	Walk rate by gender
 At the CMA level, women walk to work slightly more than men (4.5% vs 3.2%) (Figure 5), reflecting small gender differences in active commuting. However, this comparison is at a bigger geographic level than other analyses and could be concealing variation across neighborhoods.
 
- 
-Figure 5: Walk share by gender proportion at CMA level (Saskatoon).
+![walking_rate_cma_gender](https://github.com/patysalazar/plos_project/blob/main/code/walk_rate_by_sex_files/figure-html/unnamed-chunk-10-1.png)<br>
+Figure 5: Walk share by gender proportion at CMA level (Saskatoon). [(View Code)](https://github.com/patysalazar/plos_project/blob/main/code/walk_rate_by_gender.Rmd).<br>
 
 2)	Gender composition at DA-level
 At the DA level, the proportion of women varies between 40 and 60%, with more balanced distributions in central areas and higher male proportions in peripheral or industrial DAs (Figure 6).
 
-
- 
-Figure 6: Proportion of women by DA in Saskatoon.
+![women_proportion](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba_files/figure-html/unnamed-chunk-17-1.png)<br>
+Figure 6: Proportion of women by DA in Saskatoon. [(View Code)](https://github.com/patysalazar/plos_project/blob/main/code/walk_rate_by_gender.Rmd).<br>
 
 These patterns suggest that the gender composition of neighborhoods may align with differences in land use and employment type. 
 
 ### Health outcome: Diabetes at DA-level
 
 Overall diabetes prevalence (Figure 7) ranged from below 1% to over 10%. According to Statistics Canada12, the prevalence of diabetes in 2021 was 9.4%. In Saskatchewan, the diabetes prevalence was 9% in 202413. Although the administrative data source is from 1995 to 2010 and the overall prevalence has increased since then14, it accurately reflects diabetes prevalence in Saskatoon, which is lower than provincial average15. 
- 
-Figure 7: Diabetes prevalence by DA in Saskatoon.
+
+![diabetes_overall_prevalence](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba_files/figure-html/unnamed-chunk-26-1.png)<br>
+Figure 7: Diabetes prevalence by DA in Saskatoon. [(View Code)](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba.Rmd).<br>
 
 When disaggregating by gender, prevalence in men was slightly higher than prevalence in women, which is consistent with national and provincial surveillance trends16, reflected by more lighter shaded areas in the men prevalence map (Figure 8).
 
-a)		b)	
+a)	
   
+![diabetes_women_prevalence](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba_files/figure-html/unnamed-chunk-29-1.png)<br>
 
-Figure 8: Diabetes prevalence by DA in Saskatoon in women (a) and men (b). 
+b)	
+  
+![diabetes_men_prevalence](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba_files/figure-html/unnamed-chunk-28-1.png)<br>
+
+Figure 8: Diabetes prevalence by DA in Saskatoon in women (a) and men (b). [(View Code)](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba.Rmd).<br>
 
 When visually comparing to the PLOS and walk rate maps (Figures 2 and 3), there is a somewhat inverse spatial pattern. The lowest prevalence occurs in the same central neighborhoods characterized by higher walk rates and better pedestrian infrastructure, while the highest prevalence appears in outer suburban and industrial zones. This supports the expected relationship between active mobility and chronic disease risk17, although at DA level the correlation may be modest. 
 Among women (Figure 8a), diabetes prevalence is slightly lower and more evenly distributed across the city, while men (Figure 8b) exhibit higher prevalence areas in the northwest and eastern periphery of the city, coinciding with more automobile-dependent neighborhoods. There are also some missing areas in both maps, likely due to suppressed data or small counts. 	
@@ -128,13 +135,13 @@ The coefficient for women proportion per DA in the linear regression model betwe
 
 After removing DAs with walk rate equal to zero and restricting the analysis to valid proportions, the association between gender composition and walk rate became even weaker. In the dataset without these values, the unweighted regression coefficient for the proportion of women dropped to 0.020, and the association was not statistically significant (p = 0.899). The population-weighted model showed a slightly larger coefficient (0.106), but the relationship remained non-significant (p = 0.474) and weak (R2 = 0.003) (Figure 9). The results confirm that, after removing outliers, gender composition shows no meaningful linear relationship with walk share at the DA level. 
 
- 
-Figure 9: Scatterplot of Walk Rate vs Gender, Saskatoon Dissemination Areas.
+![scaterplot_walk-rate_gender](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba_files/figure-html/unnamed-chunk-40-1.png)<br>
+Figure 9: Scatterplot of Walk Rate vs Gender, Saskatoon Dissemination Areas. [(View Code)](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba.Rmd).<br>
+
 	Even though the global linear model showed only a very weak relationship, the geographical weighted regression (GWR) revealed spatial variation in the coefficient linking the proportion of women to walk rate. Local coefficients ranged from approximately –1.0 to +1.4, with a median around 0.15, indicating that the direction and strength of the association differed markedly by DA (Figure 10). 
 
- 
- 
-Figure 10: Geographically Weighted Regression Coefficients of Proportion of Women vs. Walk Rate by DA in Saskatoon.
+![gwr_coefficients_map](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba_files/figure-html/unnamed-chunk-49-1.png)<br>
+Figure 10: Geographically Weighted Regression Coefficients of Proportion of Women vs. Walk Rate by DA in Saskatoon. [(View Code)](https://github.com/patysalazar/plos_project/blob/main/code/plos_gba.Rmd).<br>
 
 In several walkable areas, particularly around the University of Saskatchewan campus, the GWR coefficients were among the most positive (shown in yellow), indicating that DAs with a higher proportion of women also had higher walk-to-work rates. In contrast, the downtown area displayed some of the strongest negative coefficients (dark purple), suggesting that women were less likely to walk to work in these central neighbourhoods despite their walkability. Most other areas, especially suburban DAs, showed coefficients close to zero. These contrasts highlight that gender walking patterns in Saskatoon are strongly context-dependent, emphasizing the need for neighbourhood-specific planning that considers gendered mobility.
 

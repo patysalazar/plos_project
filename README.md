@@ -98,10 +98,11 @@ At the DA level, the proportion of women varies between 40 and 60%, with more ba
  
 Figure 6: Proportion of women by DA in Saskatoon.
 
-	These patterns suggest that the gender composition of neighborhoods may align with differences in land use and employment type. 
+These patterns suggest that the gender composition of neighborhoods may align with differences in land use and employment type. 
 
 Health outcome: Diabetes at DA-level
-	Overall diabetes prevalence (Figure 7) ranged from below 1% to over 10%. According to Statistics Canada12, the prevalence of diabetes in 2021 was 9.4%. In Saskatchewan, the diabetes prevalence was 9% in 202413. Although the administrative data source is from 1995 to 2010 and the overall prevalence has increased since then14, it accurately reflects diabetes prevalence in Saskatoon, which is lower than provincial average15. 
+
+Overall diabetes prevalence (Figure 7) ranged from below 1% to over 10%. According to Statistics Canada12, the prevalence of diabetes in 2021 was 9.4%. In Saskatchewan, the diabetes prevalence was 9% in 202413. Although the administrative data source is from 1995 to 2010 and the overall prevalence has increased since then14, it accurately reflects diabetes prevalence in Saskatoon, which is lower than provincial average15. 
  
 Figure 7: Diabetes prevalence by DA in Saskatoon.
 
@@ -112,11 +113,10 @@ a)		b)
 
 Figure 8: Diabetes prevalence by DA in Saskatoon in women (a) and men (b). 
 
-	When visually comparing to the PLOS and walk rate maps (Figures 2 and 3), there is a somewhat inverse spatial pattern. The lowest prevalence occurs in the same central neighborhoods characterized by higher walk rates and better pedestrian infrastructure, while the highest prevalence appears in outer suburban and industrial zones. This supports the expected relationship between active mobility and chronic disease risk17, although at DA level the correlation may be modest. 
+When visually comparing to the PLOS and walk rate maps (Figures 2 and 3), there is a somewhat inverse spatial pattern. The lowest prevalence occurs in the same central neighborhoods characterized by higher walk rates and better pedestrian infrastructure, while the highest prevalence appears in outer suburban and industrial zones. This supports the expected relationship between active mobility and chronic disease risk17, although at DA level the correlation may be modest. 
+Among women (Figure 8a), diabetes prevalence is slightly lower and more evenly distributed across the city, while men (Figure 8b) exhibit higher prevalence areas in the northwest and eastern periphery of the city, coinciding with more automobile-dependent neighborhoods. There are also some missing areas in both maps, likely due to suppressed data or small counts. 	
+Overall, these patterns reinforce that walkability inequities align with health inequities. Although these patterns cannot establish causation, they do point to structural, location-based health disparities linked to transportation environments.
 
-	Among women (Figure 8a), diabetes prevalence is slightly lower and more evenly distributed across the city, while men (Figure 8b) exhibit higher prevalence areas in the northwest and eastern periphery of the city, coinciding with more automobile-dependent neighborhoods. There are also some missing areas in both maps, likely due to suppressed data or small counts. 
-
-	Overall, these patterns reinforce that walkability inequities align with health inequities. Although these patterns cannot establish causation, they do point to structural, location-based health disparities linked to transportation environments
 Correlation and Regression
 	Pairwise correlations showed a weak positive association between PLOS density and walk rate (r ≈ 0.15), confirming that better pedestrian infrastructure corresponds to slightly higher walking activity. Correlations between walk to work rate and diabetes prevalence (r ≈ -0.08) were weak, and the negative PLOS and diabetes prevalence correlation coefficient is consistent with expectations that areas with more walking have lower diabetes prevalence.  
 
@@ -132,7 +132,7 @@ Figure 9: Scatterplot of Walk Rate vs Gender, Saskatoon Dissemination Areas.
  
 Figure 10: Geographically Weighted Regression Coefficients of Proportion of Women vs. Walk Rate by DA in Saskatoon.
 
-	In several walkable areas, particularly around the University of Saskatchewan campus, the GWR coefficients were among the most positive (shown in yellow), indicating that DAs with a higher proportion of women also had higher walk-to-work rates. In contrast, the downtown area displayed some of the strongest negative coefficients (dark purple), suggesting that women were less likely to walk to work in these central neighbourhoods despite their walkability. Most other areas, especially suburban DAs, showed coefficients close to zero. These contrasts highlight that gender walking patterns in Saskatoon are strongly context-dependent, emphasizing the need for neighbourhood-specific planning that considers gendered mobility.
+In several walkable areas, particularly around the University of Saskatchewan campus, the GWR coefficients were among the most positive (shown in yellow), indicating that DAs with a higher proportion of women also had higher walk-to-work rates. In contrast, the downtown area displayed some of the strongest negative coefficients (dark purple), suggesting that women were less likely to walk to work in these central neighbourhoods despite their walkability. Most other areas, especially suburban DAs, showed coefficients close to zero. These contrasts highlight that gender walking patterns in Saskatoon are strongly context-dependent, emphasizing the need for neighbourhood-specific planning that considers gendered mobility.
 
 Together, findings suggest that PLOS and walk rates are aligned spatially but not perfectly correlated, indicating that infrastructure alone does not drive walking behaviour. Furthermore, gender composition appears to influence walkability at the DA level. Diabetes prevalence shows spatial patterns similar to those of low-PLOS and low-walk-rate areas, highlighting potential health inequities in built environment and transportation infrastructure. 
 V. Conclusions
